@@ -1,35 +1,49 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+// frontend/src/App.jsx
+import { useState, useEffect } from 'react';
+import axios from 'axios';
+import { Link } from 'react-router-dom';  // For navigation
+import './App.css';
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [projects, setProjects] = useState([]);  // Store project list
+  const [newProject, setNewProject] = useState('');  // Input for new project
+
+  // Fetch projects on load
+  useEffect(() => {
+    axios.get('http://localhost:8000/projects')
+      .then(res => setProjects(res.data))
+      .catch(err => console.error('Error fetching projects:', err));
+  }, []);
+
+  // Add a new project
+  const addProject = () => {
+    if (!newProject) return;  // Skip empty input
+    axios.post('http://localhost:8000/projects', { name: newProject })
+      .then(res => {
+        setProjects([...projects, res.data]);  // Add to list
+        setNewProject('');  // Clear input
+      })
+      .catch(err => console.error('Error adding project:', err));
+  };
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <div>
+      <h1>Project Tracker</h1>
+      <input
+        value={newProject}
+        onChange={(e) => setNewProject(e.target.value)}
+        placeholder="New Project Name"
+      />
+      <button onClick={addProject}>Add Project</button>
+      <ul>
+        {projects.map(project => (
+          <li key={project.id}>
+            {project.name} <Link to={`/project/${project.id}`}>View Tasks</Link>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
 }
 
-export default App
+export default App;  
