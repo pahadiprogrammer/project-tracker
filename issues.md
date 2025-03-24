@@ -22,6 +22,14 @@ A record of errors encountered and resolved during development.
 - Updated `main.py` (commit: "Frontend skeleton: List/add projects, add tasks").
 - **Resolution Date:** March 24, 2025
 
+
+### 2. Progress Bar Misalignment (March 25, 2025)
+- **Error:** Green bar showed when 0% complete, oversized (too wide/tall) when partially complete.
+- **Cause:** Green `<div>` rendered at 0%, height mismatch, and no overflow control in `ProjectPage.jsx`.
+- **Symptoms:** Two bars not overlapping—green sliver at 0%, green too big at 50%.
+- **Fix:** Added `progress > 0` check, fixed green height to `20px`, added `overflow: 'hidden'` to gray container.
+- **Resolution Date:** March 25, 2025
+
 ## Open Issues
 - None currently.
 
