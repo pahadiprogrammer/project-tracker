@@ -57,7 +57,15 @@ def get_projects():
 def get_tasks(project_id: int):
     c = conn.cursor()
     c.execute("SELECT * FROM tasks WHERE project_id = ?", (project_id,))
-    return [{"id": row[0], "project_id": row[1], "name": row[2], "status": row[3]} for row in c.fetchall()]
+    tasks = [{"id": row[0], "project_id": row[1], "name": row[2], "status": row[3]} for row in c.fetchall()]
+    total_tasks = len(tasks)
+    completed_tasks = sum(1 for task in tasks if task["status"] == 1)
+
+    return {
+        "tasks": tasks,
+        "total_tasks": total_tasks,
+        "completed_tasks": completed_tasks
+    }
 
 @app.patch("/tasks/{task_id}")
 def toggle_task(task_id: int):

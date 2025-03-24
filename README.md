@@ -61,9 +61,12 @@ A simple web app to track personal projects and their tasks, built with React (f
        - Backend: Added GET /tasks/{project_id} to fetch tasks, PATCH /tasks/{task_id} to toggle status (0 = to-do, 1 = done).
        - Frontend: Updated ProjectPage.jsx to fetch tasks on load, toggle status with checkboxes.
        - UI: Add tasks, check/uncheck them—status updates persist.
+   5.4 **Day 5 (March 26):**
+       - Backend: Updated GET /tasks/{project_id} to return task counts (total and completed).
+       - Frontend: Added progress bar in ProjectPage.jsx showing completed/total tasks.
+       - UI: Toggle tasks, see progress update (e.g., "2/3" with a green bar).
 
 6. **Next Steps**
-   - Day 5: Add progress bar for completed tasks.
    - Polish & Launch: Final tweaks, deploy locally by March 30, 2025.
 
 7. **Project Structure:**
