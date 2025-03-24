@@ -52,3 +52,19 @@ def get_projects():
     c = conn.cursor()  # New cursor per request
     c.execute("SELECT * FROM projects")
     return [{"id": row[0], "name": row[1]} for row in c.fetchall()]
+
+@app.get("/tasks/{project_id}")
+def get_tasks(project_id: int):
+    c = conn.cursor()
+    c.execute("SELECT * FROM tasks WHERE project_id = ?", (project_id,))
+    return [{"id": row[0], "project_id": row[1], "name": row[2], "status": row[3]} for row in c.fetchall()]
+
+@app.patch("/tasks/{task_id}")
+def toggle_task(task_id: int):
+    c = conn.cursor()
+    c.execute("SELECT status FROM tasks WHERE id = ?", (task_id,))
+    current_status = c.fetchone()[0]  # Get current status (0 or 1)
+    new_status = 1 if current_status == 0 else 0  # Flip it
+    c.execute("UPDATE tasks SET status = ? WHERE id = ?", (new_status, task_id))
+    conn.commit()
+    return {"id": task_id, "status": new_status}
