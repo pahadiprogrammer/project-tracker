@@ -46,13 +46,60 @@ div {
   max-width: 600px;
   margin: 0 auto;
 }
+
 ul {
   list-style: none;
   padding: 0;
 }
+
 li {
   margin: 10px 0;
 }
+
 input {
   margin-right: 10px;
+}
+
+.container {
+  padding: 20px;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.project-list {
+  list-style: none;
+  padding: 0;
+}
+
+.project-item {
+  margin: 10px 0;
+}
+
+.input-field {
+  margin-right: 10px;
+  padding: 5px;
+}
+
+.button {
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+.progress-container {
+  width: 100%;
+  background-color: #e0e0e0;
+  height: 20px;
+  margin-top: 10px;
+  position: relative;
+  overflow: hidden;
+}
+
+.progress-bar {
+  width: 0; /* Default, overridden by inline style */
+  background-color: #4caf50;
+  height: 20px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  transition: width 0.3s ease; /* New: Smooth transition */
 }

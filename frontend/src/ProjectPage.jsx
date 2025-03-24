@@ -1,7 +1,7 @@
-// frontend/src/ProjectPage.jsx
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
+import './App.css';
 
 function ProjectPage() {
   const { projectId } = useParams();
@@ -9,6 +9,7 @@ function ProjectPage() {
   const [newTask, setNewTask] = useState('');
   const [totalTasks, setTotalTasks] = useState(0);
   const [completedTasks, setCompletedTasks] = useState(0);
+  const [error, setError] = useState('');
 
   useEffect(() => {
     axios.get(`http://localhost:8000/tasks/${projectId}`)
@@ -17,7 +18,7 @@ function ProjectPage() {
         setTotalTasks(res.data.total_tasks);
         setCompletedTasks(res.data.completed_tasks);
       })
-      .catch(err => console.error('Error fetching tasks:', err));
+      .catch(err => setError('Failed to fetch tasks—backend might be down!'));
   }, [projectId]);
 
   const addTask = () => {
@@ -27,8 +28,9 @@ function ProjectPage() {
         setTasks([...tasks, { ...res.data, status: 0 }]);
         setTotalTasks(totalTasks + 1);
         setNewTask('');
+        setError(''); 
       })
-      .catch(err => console.error('Error adding task:', err));
+      .catch(err => setError('Failed to add task—check backend!'));
   };
 
   const toggleTask = (taskId) => {
@@ -39,48 +41,36 @@ function ProjectPage() {
         );
         setTasks(newTasks);
         setCompletedTasks(newTasks.filter(task => task.status === 1).length);
+        setError(''); // New: Clear error
       })
-      .catch(err => console.error('Error toggling task:', err));
+      .catch(err => setError('Failed to toggle task—check backend!'));
   };
 
-  // Updated: Calculate progress, ensure 0% hides green bar
   const progress = totalTasks > 0 ? (completedTasks / totalTasks) * 100 : 0;
 
   return (
-    <div>
+    <div className="container">
       <h2>Project {projectId}</h2>
+      {/* New: Error display */}
+      {error && <p style={{ color: 'red' }}>{error}</p>}
       <input
+        className="input-field"
         value={newTask}
         onChange={(e) => setNewTask(e.target.value)}
         placeholder="New Task"
       />
-      <button onClick={addTask}>Add Task</button>
+      <button className="button" onClick={addTask}>Add Task</button>
       <div>
         Progress: {completedTasks}/{totalTasks}
-        <div style={{
-          width: '100%',              // Full width container
-          backgroundColor: '#e0e0e0', // Gray background
-          height: '20px',             // Fixed height
-          marginTop: '10px',          // Spacing
-          position: 'relative',       // Enable child positioning
-          overflow: 'hidden'          // New: Clip any overflow
-        }}>
-          {/* Updated: Only show green bar if progress > 0 */}
+        <div className="progress-container">
           {progress > 0 && (
-            <div style={{
-              width: `${progress}%`,      // Progress width
-              backgroundColor: '#4caf50', // Green fill
-              height: '20px',             // Updated: Exact height match
-              position: 'absolute',       // Overlay on gray
-              top: 0,                     // Align to top
-              left: 0                     // Start from left
-            }} />
+            <div className="progress-bar" style={{ width: `${progress}%` }} />
           )}
         </div>
       </div>
-      <ul>
+      <ul className="project-list">
         {tasks.map(task => (
-          <li key={task.id}>
+          <li className="project-item" key={task.id}>
             <input
               type="checkbox"
               checked={task.status === 1}
