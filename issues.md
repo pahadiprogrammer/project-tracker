@@ -39,6 +39,13 @@ A record of errors encountered and resolved during development.
 - **Fix:** Removed `margin: 10px 0` from `.project-item, .task-item` in `App.css`.
 - **Resolution Date:** March 27, 2025
 
+### 6. Inconsistent Divider Spacing (March 27, 2025)
+- **Error:** Spacing around horizontal divider differed between projects and tasks pages.
+- **Cause:** Multiple containers on projects page (`20px padding` each) vs. single container on tasks page.
+- **Symptoms:** Larger gaps on projects page, uneven visual flow.
+- **Fix:** Unified projects page to single `.container` in `App.jsx`, standardized `.divider` margins to `25px 0` in `App.css`.
+- **Resolution Date:** March 27, 2025
+
 ## Open Issues
 - None currently.
 

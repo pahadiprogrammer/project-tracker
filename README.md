@@ -65,9 +65,13 @@ A simple web app to track personal projects and their tasks, built with React (f
        - Backend: Updated GET /tasks/{project_id} to return task counts (total and completed).
        - Frontend: Added progress bar in ProjectPage.jsx showing completed/total tasks.
        - UI: Toggle tasks, see progress update (e.g., "2/3" with a green bar).
-   5.5 **Day 4 (March 25):**
+   5.5 **Day 4 (March 25) to Day 6(March 27):**
        - Frontend: Moved styles to App.css, added error handling for API failures.
        - UI: Cleaner layout, red error messages on fetch/add/toggle failures.
+       - Projects Page: Single container, numbered projects with alternating shades, “View Tasks” buttons.
+       - Tasks Page: Project name in header (“[Name] Tasks”), numbered tasks with shades, strike-through for completed, styled progress text, divider between input and content, “Task List” header.
+       - Fixed: Multiple spacing issues—unified container structure, consistent divider gaps (see issues.md).
+   
 
 6. **Project Structure:**
 

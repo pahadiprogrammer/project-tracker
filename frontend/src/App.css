@@ -1,17 +1,5 @@
+/* frontend/src/App.css */
 .container {
-  padding: 20px;
-  max-width: 600px;
-  margin: 0 auto;
-}
-
-.add-project-section {
-  padding: 20px;
-  max-width: 600px;
-  margin: 0 auto 20px auto; /* Space below section */
-  border-bottom: 1px solid #e0e0e0; /* Subtle divider */
-}
-
-.project-list-section {
   padding: 20px;
   max-width: 600px;
   margin: 0 auto;
@@ -20,47 +8,53 @@
 .project-list, .task-list {
   list-style: none;
   padding: 0;
+  margin: 0;
 }
 
 .project-item, .task-item {
-  
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 8px;
-  height: 40px;
 }
 
 .project-item:nth-child(odd) {
-  background-color: #f9f9f9; /* Light gray for odd rows */
+  background-color: #f9f9f9;
 }
 
 .project-item:nth-child(even) {
-  background-color: #ffffff; /* White for even rows */
+  background-color: #ffffff;
+}
+
+.task-item:nth-child(odd) {
+  background-color: #f9f9f9;
+}
+
+.task-item:nth-child(even) {
+  background-color: #ffffff;
 }
 
 .project-name {
-  /*font-weight: bold;*/
-  flex-grow: 1;         /* Take available space */
+  flex-grow: 1;
 }
 
 .task-link {
-  margin-left: 10px;    /* Space from name */
-  padding: 5px 10px;    /* Button-like padding */
-  background-color: #4caf50; /* Green background */
-  color: white;         /* White text */
-  text-decoration: none; /* No underline */
-  border-radius: 4px;   /* Rounded corners */
+  margin-left: 10px;
+  padding: 5px 10px;
+  background-color: #4caf50;
+  color: white;
+  text-decoration: none;
+  border-radius: 4px;
 }
 
 .task-link:hover {
-  background-color: #45a049; /* Darker green on hover */
+  background-color: #45a049;
 }
 
 .checkbox-container {
-  width: 30px;          /* Fixed width for checkboxes */
-  flex-shrink: 0;       /* Prevent shrinking */
-  display: flex;        /* Center checkbox within */
+  width: 30px;
+  flex-shrink: 0;
+  display: flex;
   justify-content: center;
   margin-left: 0;
 }
@@ -69,8 +63,17 @@
   margin: 0;
 }
 
+.task-name {
+  flex-grow: 1;
+}
+
+.task-name.completed {
+  text-decoration: line-through;
+  color: #888;
+}
+
 .input-group {
-  margin-bottom: 20px;
+  margin-bottom: 25px;
 }
 
 .input-group input {
@@ -83,7 +86,14 @@
 }
 
 .progress-container {
-  margin-top: 10px;
+  margin-top: 25px;
+  margin-left: 0;
+}
+
+.progress-text {
+  font-weight: bold;
+  font-size: 1.1em;
+  margin-bottom: 5px;
 }
 
 .progress-bar {
@@ -101,4 +111,19 @@
   position: absolute;
   top: 0;
   left: 0;
+}
+
+.divider {
+  border-bottom: 1px solid #e0e0e0;
+  margin: 25px 0;
+}
+
+h2 {
+  margin-bottom: 15px;
+}
+
+.task-list-header {
+  font-size: 1.2em;
+  font-weight: bold;
+  margin-bottom: 10px;
 }

@@ -1,3 +1,4 @@
+// frontend/src/ProjectPage.jsx
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
@@ -9,6 +10,7 @@ function ProjectPage() {
   const [newTask, setNewTask] = useState('');
   const [totalTasks, setTotalTasks] = useState(0);
   const [completedTasks, setCompletedTasks] = useState(0);
+  const [projectName, setProjectName] = useState('');
   const [error, setError] = useState('');
 
   useEffect(() => {
@@ -20,6 +22,14 @@ function ProjectPage() {
         setError('');
       })
       .catch(err => setError('Failed to fetch tasks. Is the backend running?'));
+
+    axios.get(`http://localhost:8000/projects`)
+      .then(res => {
+        const project = res.data.find(p => p.id === parseInt(projectId));
+        setProjectName(project ? project.name : 'Unknown Project');
+        setError('');
+      })
+      .catch(err => setError('Failed to fetch project name. Check backend connection.'));
   }, [projectId]);
 
   const addTask = () => {
@@ -51,7 +61,7 @@ function ProjectPage() {
 
   return (
     <div className="container">
-      <h2>Project {projectId}</h2>
+      <h2>{projectName} Tasks</h2>
       {error && <p style={{ color: 'red' }}>{error}</p>}
       <div className="input-group">
         <input
@@ -61,16 +71,18 @@ function ProjectPage() {
         />
         <button onClick={addTask}>Add Task</button>
       </div>
+      <div className="divider"></div>
       <div className="progress-container">
-        Progress: {completedTasks}/{totalTasks}
+        <span className="progress-text">Progress: {completedTasks}/{totalTasks}</span>
         <div className="progress-bar">
           {progress > 0 && (
             <div className="progress-fill" style={{ width: `${progress}%` }} />
           )}
         </div>
       </div>
+      <h3 className="task-list-header">Task List</h3>
       <ul className="task-list">
-        {tasks.map(task => (
+        {tasks.map((task, index) => (
           <li key={task.id} className="task-item">
             <span className="checkbox-container">
               <input
@@ -79,7 +91,9 @@ function ProjectPage() {
                 onChange={() => toggleTask(task.id)}
               />
             </span>
-            {task.name}
+            <span className={`task-name ${task.status === 1 ? 'completed' : ''}`}>
+              {`${index + 1}. ${task.name}`}
+            </span>
           </li>
         ))}
       </ul>
