@@ -27,24 +27,32 @@ function App() {
   };
 
   return (
-    <div className="container">
-      <h1>Project Tracker</h1>
-      {error && <p style={{ color: 'red' }}>{error}</p>}
-      <input
-        className="input-field"
-        value={newProject}
-        onChange={(e) => setNewProject(e.target.value)}
-        placeholder="New Project Name"
-      />
-      <button className="button" onClick={addProject}>Add Project</button>
-      <ul className="project-list">
-        {projects.map(project => (
-          <li className="project-item" key={project.id}>
-            {project.name} <Link to={`/project/${project.id}`}>View Tasks</Link>
-          </li>
-        ))}
-      </ul>
-    </div>
+    <>
+      <div className="add-project-section">
+        <h1>Project Tracker</h1>
+        {error && <p style={{ color: 'red' }}>{error}</p>}
+        <div className="input-group">
+          <input
+            value={newProject}
+            onChange={(e) => setNewProject(e.target.value)}
+            placeholder="New Project Name"
+          />
+          <button onClick={addProject}>Add Project</button>
+        </div>
+      </div>
+      
+      <div className="project-list-section">
+        <h2>Projects</h2>
+        <ul className="project-list">
+          {projects.map((project, index) => (
+            <li key={project.id} className="project-item">
+              <span className="project-name">{`${index + 1}. ${project.name}`}</span>
+              <Link to={`/project/${project.id}`} className="task-link">View Tasks</Link>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </>
   );
 }
 

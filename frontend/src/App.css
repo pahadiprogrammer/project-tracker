@@ -1,105 +1,104 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
-}
-
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
-}
-
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
-}
-
-.card {
-  padding: 2em;
-}
-
-.read-the-docs {
-  color: #888;
-}
-
-div {
-  padding: 20px;
-  max-width: 600px;
-  margin: 0 auto;
-}
-
-ul {
-  list-style: none;
-  padding: 0;
-}
-
-li {
-  margin: 10px 0;
-}
-
-input {
-  margin-right: 10px;
-}
-
 .container {
   padding: 20px;
   max-width: 600px;
   margin: 0 auto;
 }
 
-.project-list {
+.add-project-section {
+  padding: 20px;
+  max-width: 600px;
+  margin: 0 auto 20px auto; /* Space below section */
+  border-bottom: 1px solid #e0e0e0; /* Subtle divider */
+}
+
+.project-list-section {
+  padding: 20px;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.project-list, .task-list {
   list-style: none;
   padding: 0;
 }
 
-.project-item {
-  margin: 10px 0;
+.project-item, .task-item {
+  
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px;
+  height: 40px;
 }
 
-.input-field {
+.project-item:nth-child(odd) {
+  background-color: #f9f9f9; /* Light gray for odd rows */
+}
+
+.project-item:nth-child(even) {
+  background-color: #ffffff; /* White for even rows */
+}
+
+.project-name {
+  /*font-weight: bold;*/
+  flex-grow: 1;         /* Take available space */
+}
+
+.task-link {
+  margin-left: 10px;    /* Space from name */
+  padding: 5px 10px;    /* Button-like padding */
+  background-color: #4caf50; /* Green background */
+  color: white;         /* White text */
+  text-decoration: none; /* No underline */
+  border-radius: 4px;   /* Rounded corners */
+}
+
+.task-link:hover {
+  background-color: #45a049; /* Darker green on hover */
+}
+
+.checkbox-container {
+  width: 30px;          /* Fixed width for checkboxes */
+  flex-shrink: 0;       /* Prevent shrinking */
+  display: flex;        /* Center checkbox within */
+  justify-content: center;
+  margin-left: 0;
+}
+
+.task-item input[type="checkbox"] {
+  margin: 0;
+}
+
+.input-group {
+  margin-bottom: 20px;
+}
+
+.input-group input {
   margin-right: 10px;
   padding: 5px;
 }
 
-.button {
+.input-group button {
   padding: 5px 10px;
-  cursor: pointer;
 }
 
 .progress-container {
-  width: 100%;
-  background-color: #e0e0e0;
-  height: 20px;
   margin-top: 10px;
-  position: relative;
-  overflow: hidden;
 }
 
 .progress-bar {
-  width: 0; /* Default, overridden by inline style */
+  width: 100%;
+  background-color: #e0e0e0;
+  height: 20px;
+  position: relative;
+  overflow: hidden;
+  margin-left: 0;
+}
+
+.progress-fill {
   background-color: #4caf50;
   height: 20px;
   position: absolute;
   top: 0;
   left: 0;
-  transition: width 0.3s ease; /* New: Smooth transition */
 }

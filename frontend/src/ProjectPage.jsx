@@ -17,8 +17,9 @@ function ProjectPage() {
         setTasks(res.data.tasks);
         setTotalTasks(res.data.total_tasks);
         setCompletedTasks(res.data.completed_tasks);
+        setError('');
       })
-      .catch(err => setError('Failed to fetch tasks—backend might be down!'));
+      .catch(err => setError('Failed to fetch tasks. Is the backend running?'));
   }, [projectId]);
 
   const addTask = () => {
@@ -28,9 +29,9 @@ function ProjectPage() {
         setTasks([...tasks, { ...res.data, status: 0 }]);
         setTotalTasks(totalTasks + 1);
         setNewTask('');
-        setError(''); 
+        setError('');
       })
-      .catch(err => setError('Failed to add task—check backend!'));
+      .catch(err => setError('Failed to add task. Check backend connection.'));
   };
 
   const toggleTask = (taskId) => {
@@ -41,9 +42,9 @@ function ProjectPage() {
         );
         setTasks(newTasks);
         setCompletedTasks(newTasks.filter(task => task.status === 1).length);
-        setError(''); // New: Clear error
+        setError('');
       })
-      .catch(err => setError('Failed to toggle task—check backend!'));
+      .catch(err => setError('Failed to toggle task. Check backend connection.'));
   };
 
   const progress = totalTasks > 0 ? (completedTasks / totalTasks) * 100 : 0;
@@ -51,31 +52,33 @@ function ProjectPage() {
   return (
     <div className="container">
       <h2>Project {projectId}</h2>
-      {/* New: Error display */}
       {error && <p style={{ color: 'red' }}>{error}</p>}
-      <input
-        className="input-field"
-        value={newTask}
-        onChange={(e) => setNewTask(e.target.value)}
-        placeholder="New Task"
-      />
-      <button className="button" onClick={addTask}>Add Task</button>
-      <div>
+      <div className="input-group">
+        <input
+          value={newTask}
+          onChange={(e) => setNewTask(e.target.value)}
+          placeholder="New Task"
+        />
+        <button onClick={addTask}>Add Task</button>
+      </div>
+      <div className="progress-container">
         Progress: {completedTasks}/{totalTasks}
-        <div className="progress-container">
+        <div className="progress-bar">
           {progress > 0 && (
-            <div className="progress-bar" style={{ width: `${progress}%` }} />
+            <div className="progress-fill" style={{ width: `${progress}%` }} />
           )}
         </div>
       </div>
-      <ul className="project-list">
+      <ul className="task-list">
         {tasks.map(task => (
-          <li className="project-item" key={task.id}>
-            <input
-              type="checkbox"
-              checked={task.status === 1}
-              onChange={() => toggleTask(task.id)}
-            />
+          <li key={task.id} className="task-item">
+            <span className="checkbox-container">
+              <input
+                type="checkbox"
+                checked={task.status === 1}
+                onChange={() => toggleTask(task.id)}
+              />
+            </span>
             {task.name}
           </li>
         ))}

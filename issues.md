@@ -5,30 +5,39 @@ A record of errors encountered and resolved during development.
 ## Fixed Issues
 
 ### 1. SQLite Recursive Cursor Error (March 24, 2025)
-- **Error:**
-   ```
-   sqlite3.ProgrammingError: Recursive use of cursors not allowed INFO: 127.0.0.1:xxxxx - "GET /projects HTTP/1.1" 500 Internal Server Error
-   ```
-
-- **Cause:**
-- Global cursor (`c = conn.cursor()`) reused across requests in `main.py`.
-- FastAPI’s async threads + `check_same_thread=False` caused cursor conflicts.
-- **Symptoms:**
-- Backend crashed with 500 on `GET /projects`.
-- Frontend showed CORS error (missing `Access-Control-Allow-Origin`) due to no response.
-- **Fix:**
-- Moved to per-request cursors: `c = conn.cursor()` inside each endpoint.
-- Added `init_db()` for one-time table setup.
-- Updated `main.py` (commit: "Frontend skeleton: List/add projects, add tasks").
+- **Error:** `sqlite3.ProgrammingError: Recursive use of cursors not allowed`
+- **Cause:** Global cursor reused across requests in `main.py`.
+- **Symptoms:** Backend crashed with 500, frontend showed CORS error.
+- **Fix:** Per-request cursors in `main.py`.
 - **Resolution Date:** March 24, 2025
 
+### 2. Progress Bar Misalignment (March 26, 2025)
+- **Error:** Green bar showed at 0%, oversized when partially complete.
+- **Cause:** Green `<div>` rendered at 0%, height mismatch in `ProjectPage.jsx`.
+- **Symptoms:** Two bars not overlapping—sliver at 0%, green too big at 50%.
+- **Fix:** Added `progress > 0` check, fixed height, added `overflow: 'hidden'`.
+- **Resolution Date:** March 26, 2025
 
-### 2. Progress Bar Misalignment (March 25, 2025)
-- **Error:** Green bar showed when 0% complete, oversized (too wide/tall) when partially complete.
-- **Cause:** Green `<div>` rendered at 0%, height mismatch, and no overflow control in `ProjectPage.jsx`.
-- **Symptoms:** Two bars not overlapping—green sliver at 0%, green too big at 50%.
-- **Fix:** Added `progress > 0` check, fixed green height to `20px`, added `overflow: 'hidden'` to gray container.
-- **Resolution Date:** March 25, 2025
+### 3. Checkbox Misalignment (March 27, 2025)
+- **Error:** Checkboxes shifted left based on task name length.
+- **Cause:** Flex layout in `.task-item` didn’t fix checkbox position.
+- **Symptoms:** Uneven checkbox column in task list.
+- **Fix:** Added `.checkbox-container` with fixed width in `App.css`, wrapped checkbox in `ProjectPage.jsx`.
+- **Resolution Date:** March 27, 2025
+
+### 4. Checkbox Offset from Progress Bar (March 27, 2025)
+- **Error:** Checkboxes aligned left of progress bar’s start.
+- **Cause:** Default `<ul>` margin and inconsistent container offsets in `App.css`.
+- **Symptoms:** Checkboxes not vertically aligned with progress bar edge.
+- **Fix:** Added `margin: 0` to `.task-list`, `margin-left: 0` to `.progress-container`, `.checkbox-container`, and `.progress-bar` in `App.css`.
+- **Resolution Date:** March 27, 2025
+
+### 5. Uneven Row Heights in Project List (March 27, 2025)
+- **Error:** Even rows (white) appeared taller than odd rows (gray).
+- **Cause:** `margin: 10px 0` on `.project-item` added white space, blending with even rows.
+- **Symptoms:** Inconsistent row heights in project list.
+- **Fix:** Removed `margin: 10px 0` from `.project-item, .task-item` in `App.css`.
+- **Resolution Date:** March 27, 2025
 
 ## Open Issues
 - None currently.
