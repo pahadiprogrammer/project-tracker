@@ -61,7 +61,7 @@ function ProjectPage() {
 
   return (
     <div className="container">
-      <h2>{projectName} Tasks</h2>
+      <h1>{projectName} Tasks</h1> {/* Updated: h2 to h1 */}
       {error && <p style={{ color: 'red' }}>{error}</p>}
       <div className="input-group">
         <input
@@ -80,7 +80,7 @@ function ProjectPage() {
           )}
         </div>
       </div>
-      <h3 className="task-list-header">Task List</h3>
+      <h2 className="task-list-header">Task List</h2> {/* Updated: h3 to h2 */}
       <ul className="task-list">
         {tasks.map((task, index) => (
           <li key={task.id} className="task-item">

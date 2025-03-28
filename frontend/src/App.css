@@ -88,12 +88,16 @@
 .progress-container {
   margin-top: 25px;
   margin-left: 0;
+  display: flex; /* Added: Flex layout for consistent spacing */
+  flex-direction: column; /* Added: Stack text and bar vertically */
+  gap: 15px; /* Added: Matches h2 margin-bottom */
 }
 
 .progress-text {
+  font-family: 'Arial', sans-serif;
+  font-size: 1.5em;
   font-weight: bold;
-  font-size: 1.1em;
-  margin-bottom: 5px;
+  margin-bottom: 0; /* Updated: Rely on container gap */
 }
 
 .progress-bar {
@@ -118,11 +122,22 @@
   margin: 25px 0;
 }
 
-h2 {
+h1 {
+  font-family: 'Arial', sans-serif;
+  font-size: 2em;
+  font-weight: bold;
   margin-bottom: 15px;
 }
 
-.task-list-header {
+h2 {
+  font-family: 'Arial', sans-serif;
+  font-size: 1.5em;
+  font-weight: bold;
+  margin-bottom: 15px;
+}
+
+h3.task-list-header {
+  font-family: 'Arial', sans-serif;
   font-size: 1.2em;
   font-weight: bold;
   margin-bottom: 10px;
