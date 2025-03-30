@@ -46,6 +46,41 @@ A record of errors encountered and resolved during development.
 - **Fix:** Unified projects page to single `.container` in `App.jsx`, standardized `.divider` margins to `25px 0` in `App.css`.
 - **Resolution Date:** March 27, 2025
 
+### 7. Re-rendering Disruption During Task Updates (March 28, 2025)
+-   **Error:** Toggling task status caused a jarring re-render of the task list.
+-   **Cause:** Parent component's state updates triggered re-renders of all child components.
+-   **Symptoms:** Noticeable visual disruption during task updates.
+-   **Fix:** Added loading indicators and messages to provide visual feedback during re-renders.
+-   **Resolution Date:** March 28, 2025
+
+### 8. Missing Loading Indicators During Project Addition (March 28, 2025)
+-   **Error:** No visual feedback during project addition.
+-   **Cause:** Loading indicators were not implemented for project addition.
+-   **Symptoms:** User perceived the application as unresponsive during project addition.
+-   **Fix:** Added loading indicators and messages to the project list page.
+-   **Resolution Date:** March 28, 2025
+
+### 9. Lack of Latency Simulation (March 28, 2025)
+-   **Error:** API calls were too fast, resulting in an unrealistic user experience.
+-   **Cause:** API calls were resolving immediately, without any simulated latency.
+-   **Symptoms:** Loading indicators appeared and disappeared too quickly.
+-   **Fix:** Added `setTimeout` to simulate a 1-second delay before resolving API calls.
+-   **Resolution Date:** March 28, 2025
+
+### 10. Missing Loader on Initial Task List Load (March 28, 2025)
+-   **Error:** Loader was not displayed when the task list page was initially accessed.
+-   **Cause:** Initial `loading` state was set to `false`.
+-   **Symptoms:** Task list appeared without any loading indicator.
+-   **Fix:** Changed initial `loading` state to `true` and added loading message.
+-   **Resolution Date:** March 28, 2025
+
+### 11. Excessive Latency During Task Updates (March 28, 2025)
+-   **Error:** Task updates felt slow due to 1-second latency.
+-   **Cause:** Task updates had the same 1-second latency as initial loads.
+-   **Symptoms:** Task updates felt sluggish.
+-   **Fix:** Reduced latency for task updates to 500 milliseconds.
+-   **Resolution Date:** March 28, 2025
+
 ## Open Issues
 - None currently.
 
