@@ -1,144 +1,227 @@
-/* frontend/src/App.css */
-.container {
-  padding: 20px;
-  max-width: 600px;
-  margin: 0 auto;
+/* ================ */
+/* Theme Variables */
+/* ================ */
+:root {
+  /* Light Theme (default) */
+  --bg-color: #f5f7fa;
+  --text-color: #333;
+  --card-bg: #ffffff;
+  --border-color: #e0e0e0;
+  --primary-color: #3498db;
+  --secondary-color: #2c3e50;
+  --success-color: #2ecc71;
+  --danger-color: #e74c3c;
+  --input-bg: #ffffff;
+  --input-text: #333;
 }
 
-.project-list, .task-list {
+[data-theme="dark"] {
+  /* Dark Theme */
+  --bg-color: #121212;
+  --text-color: #f5f5f5;
+  --card-bg: #1e1e1e;
+  --border-color: #333;
+  --primary-color: #5dade2;
+  --secondary-color: #7f8c8d;
+  --success-color: #58d68d;
+  --danger-color: #f1948a;
+  --input-bg: #2d2d2d;
+  --input-text: #f5f5f5;
+}
+
+/* Base Styles */
+body {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Project List Styles */
+.project-item, .task-item {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+}
+
+/* Input Styles */
+.input-group input {
+  background-color: var(--input-bg);
+  color: var(--input-text);
+  border-color: var(--border-color);
+}
+
+h1, h2, h3, h4 {
+  font-weight: 600;
+  margin: 0 0 calc(var(--spacing-unit) * 2) 0;
+  color: var(--color-primary);
+}
+
+h1 { font-size: 2rem; }
+h2 { font-size: 1.75rem; }
+h3 { font-size: 1.5rem; }
+h4 { font-size: 1.25rem; }
+
+/* ================ */
+/* Project List Page */
+/* ================ */
+.project-list {
   list-style: none;
   padding: 0;
-  margin: 0;
+  margin: calc(var(--spacing-unit) * 3) 0;
 }
 
-.project-item, .task-item {
+.project-item {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  padding: 8px;
+  padding: calc(var(--spacing-unit) * 2);
+  margin-bottom: calc(var(--spacing-unit) * 1.5);
+  background: white;
+  border-radius: 6px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  transition: transform 0.2s, box-shadow 0.2s;
 }
 
-.project-item:nth-child(odd) {
-  background-color: #f9f9f9;
-}
-
-.project-item:nth-child(even) {
-  background-color: #ffffff;
-}
-
-.task-item:nth-child(odd) {
-  background-color: #f9f9f9;
-}
-
-.task-item:nth-child(even) {
-  background-color: #ffffff;
+.project-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
 }
 
 .project-name {
   flex-grow: 1;
+  font-size: 1.1rem;
+  font-weight: 500;
+  padding: 0 calc(var(--spacing-unit) * 2);
 }
 
 .task-link {
-  margin-left: 10px;
-  padding: 5px 10px;
-  background-color: #4caf50;
+  display: inline-block;
+  padding: calc(var(--spacing-unit) * 1) calc(var(--spacing-unit) * 2);
+  background-color: var(--color-accent);
   color: white;
   text-decoration: none;
   border-radius: 4px;
+  font-size: 0.9rem;
+  transition: background-color 0.2s;
 }
 
 .task-link:hover {
-  background-color: #45a049;
+  background-color: #2980b9;
 }
 
-.checkbox-container {
-  width: 30px;
-  flex-shrink: 0;
+/* ================ */
+/* Project Details Page */
+/* ================ */
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: calc(var(--spacing-unit) * 4);
+}
+
+.task-list-header {
+  margin: calc(var(--spacing-unit) * 3) 0 calc(var(--spacing-unit) * 2) 0;
+  font-size: 1.3rem;
+  color: var(--color-secondary);
+}
+
+.task-item {
   display: flex;
-  justify-content: center;
-  margin-left: 0;
+  align-items: center;
+  padding: calc(var(--spacing-unit) * 2) calc(var(--spacing-unit) * 3);
+  margin-bottom: calc(var(--spacing-unit) * 1.5);
+  background: white;
+  border-radius: 6px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
 }
 
-.task-item input[type="checkbox"] {
-  margin: 0;
+.task-checkbox {
+  margin-right: calc(var(--spacing-unit) * 2);
 }
 
 .task-name {
   flex-grow: 1;
+  font-size: 1rem;
+  padding: 0 calc(var(--spacing-unit) * 2);
 }
 
 .task-name.completed {
-  text-decoration: line-through;
-  color: #888;
+  color: #95a5a6;
 }
 
+/* ================ */
+/* Forms & Inputs */
+/* ================ */
 .input-group {
-  margin-bottom: 25px;
+  display: flex;
+  gap: calc(var(--spacing-unit) * 2);
+  margin: calc(var(--spacing-unit) * 3) 0;
 }
 
 .input-group input {
-  margin-right: 10px;
-  padding: 5px;
+  flex-grow: 1;
+  padding: calc(var(--spacing-unit) * 1.5);
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-family: var(--font-primary);
+  font-size: 1rem;
 }
 
 .input-group button {
-  padding: 5px 10px;
+  padding: 0 calc(var(--spacing-unit) * 3);
+  background-color: var(--color-success);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-family: var(--font-primary);
+  font-weight: 500;
+  transition: background-color 0.2s;
 }
 
-.progress-container {
-  margin-top: 25px;
-  margin-left: 0;
-  display: flex; /* Added: Flex layout for consistent spacing */
-  flex-direction: column; /* Added: Stack text and bar vertically */
-  gap: 15px; /* Added: Matches h2 margin-bottom */
+.input-group button:hover {
+  background-color: #27ae60;
 }
 
-.progress-text {
-  font-family: 'Arial', sans-serif;
-  font-size: 1.5em;
-  font-weight: bold;
-  margin-bottom: 0; /* Updated: Rely on container gap */
+/* ================ */
+/* LLM Components */
+/* ================ */
+.llm-container {
+  margin: calc(var(--spacing-unit) * 4) 0;
+  padding: calc(var(--spacing-unit) * 3);
+  background: #f8f9fa;
+  border-radius: 8px;
 }
 
-.progress-bar {
+.llm-container textarea {
   width: 100%;
-  background-color: #e0e0e0;
-  height: 20px;
-  position: relative;
-  overflow: hidden;
-  margin-left: 0;
+  min-height: 120px;
+  padding: calc(var(--spacing-unit) * 2);
+  margin-bottom: calc(var(--spacing-unit) * 2);
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-family: var(--font-primary);
+  resize: vertical;
 }
 
-.progress-fill {
-  background-color: #4caf50;
-  height: 20px;
-  position: absolute;
-  top: 0;
-  left: 0;
-}
-
+/* ================ */
+/* Utility Classes */
+/* ================ */
 .divider {
-  border-bottom: 1px solid #e0e0e0;
-  margin: 25px 0;
+  height: 1px;
+  background: #eee;
+  margin: calc(var(--spacing-unit) * 4) 0;
 }
 
-h1 {
-  font-family: 'Arial', sans-serif;
-  font-size: 2em;
-  font-weight: bold;
-  margin-bottom: 15px;
+.no-tasks, .no-projects {
+  color: #7f8c8d;
+  font-style: italic;
+  text-align: center;
+  padding: calc(var(--spacing-unit) * 4) 0;
 }
 
-h2 {
-  font-family: 'Arial', sans-serif;
-  font-size: 1.5em;
-  font-weight: bold;
-  margin-bottom: 15px;
-}
-
-h3.task-list-header {
-  font-family: 'Arial', sans-serif;
-  font-size: 1.2em;
-  font-weight: bold;
-  margin-bottom: 10px;
+.error-message {
+  color: var(--color-danger);
+  background: #fdecea;
+  padding: calc(var(--spacing-unit) * 2);
+  border-radius: 4px;
+  margin-bottom: calc(var(--spacing-unit) * 3);
+  border-left: 3px solid var(--color-danger);
 }

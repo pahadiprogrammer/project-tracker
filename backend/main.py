@@ -1,12 +1,60 @@
-# backend/main.py
-from fastapi import FastAPI
+from fastapi import FastAPI, Depends, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.security import APIKeyHeader
 from pydantic import BaseModel
 import sqlite3
+import os
+from dotenv import load_dotenv
+from contextlib import contextmanager
+
+# Load environment variables
+load_dotenv()
 
 app = FastAPI()
 
-# Enable CORS for React frontend
+# Security Configuration
+API_KEY_NAME = "X-API-KEY"
+api_key_header = APIKeyHeader(name=API_KEY_NAME)
+
+async def validate_api_key(api_key: str = Depends(api_key_header)):
+    print(api_key)
+    print(os.getenv("BACKEND_API_KEY"))
+    print("hello123")
+    """Validate API key from header"""
+    if api_key != os.getenv("BACKEND_API_KEY"):
+        raise HTTPException(status_code=403, detail="Invalid API Key")
+
+# Database Setup
+@contextmanager
+def get_db():
+    conn = sqlite3.connect("tracker.db")
+    conn.row_factory = sqlite3.Row
+    try:
+        yield conn
+    finally:
+        conn.close()
+
+def init_db():
+    with get_db() as conn:
+        conn.execute("""
+            CREATE TABLE IF NOT EXISTS projects (
+                id INTEGER PRIMARY KEY,
+                name TEXT NOT NULL
+            )
+        """)
+        conn.execute("""
+            CREATE TABLE IF NOT EXISTS tasks (
+                id INTEGER PRIMARY KEY,
+                project_id INTEGER NOT NULL,
+                name TEXT NOT NULL,
+                status INTEGER DEFAULT 0,
+                FOREIGN KEY(project_id) REFERENCES projects(id)
+            )
+        """)
+
+init_db()
+
+# CORS Configuration
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["http://localhost:5173"],
@@ -14,18 +62,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Global connection (still fine with check_same_thread=False)
-conn = sqlite3.connect("tracker.db", check_same_thread=False)
-
-# Initialize tables (only once at startup)
-def init_db():
-    c = conn.cursor()  # Temporary cursor for setup
-    c.execute("CREATE TABLE IF NOT EXISTS projects (id INTEGER PRIMARY KEY, name TEXT)")
-    c.execute("CREATE TABLE IF NOT EXISTS tasks (id INTEGER PRIMARY KEY, project_id INTEGER, name TEXT, status INTEGER DEFAULT 0)")
-    conn.commit()
-
-init_db()  # Run once when app starts
-
+# Models
 class Project(BaseModel):
     name: str
 
@@ -33,46 +70,50 @@ class Task(BaseModel):
     project_id: int
     name: str
 
-@app.post("/projects")
-def add_project(project: Project):
-    c = conn.cursor()  # New cursor per request
-    c.execute("INSERT INTO projects (name) VALUES (?)", (project.name,))
-    conn.commit()
-    return {"id": c.lastrowid, "name": project.name}
+# Routes
+@app.post("/projects", dependencies=[Depends(validate_api_key)])
+def create_project(project: Project):
+    with get_db() as conn:
+        cur = conn.cursor()
+        cur.execute("INSERT INTO projects (name) VALUES (?)", (project.name,))
+        conn.commit()
+        return {"id": cur.lastrowid, "name": project.name}
 
-@app.post("/tasks")
-def add_task(task: Task):
-    c = conn.cursor()  # New cursor per request
-    c.execute("INSERT INTO tasks (project_id, name) VALUES (?, ?)", (task.project_id, task.name))
-    conn.commit()
-    return {"id": c.lastrowid, "project_id": task.project_id, "name": task.name}
-
-@app.get("/projects")
+@app.get("/projects", dependencies=[Depends(validate_api_key)])
 def get_projects():
-    c = conn.cursor()  # New cursor per request
-    c.execute("SELECT * FROM projects")
-    return [{"id": row[0], "name": row[1]} for row in c.fetchall()]
+    with get_db() as conn:
+        cur = conn.cursor()
+        cur.execute("SELECT * FROM projects")
+        return [dict(row) for row in cur.fetchall()]
 
-@app.get("/tasks/{project_id}")
+@app.get("/tasks/{project_id}", dependencies=[Depends(validate_api_key)])
 def get_tasks(project_id: int):
-    c = conn.cursor()
-    c.execute("SELECT * FROM tasks WHERE project_id = ?", (project_id,))
-    tasks = [{"id": row[0], "project_id": row[1], "name": row[2], "status": row[3]} for row in c.fetchall()]
-    total_tasks = len(tasks)
-    completed_tasks = sum(1 for task in tasks if task["status"] == 1)
+    with get_db() as conn:
+        cur = conn.cursor()
+        cur.execute("SELECT * FROM tasks WHERE project_id = ?", (project_id,))
+        tasks = [dict(row) for row in cur.fetchall()]
+        return {
+            "tasks": tasks,
+            "total_tasks": len(tasks),
+            "completed_tasks": sum(1 for t in tasks if t["status"] == 1)
+        }
 
-    return {
-        "tasks": tasks,
-        "total_tasks": total_tasks,
-        "completed_tasks": completed_tasks
-    }
+@app.post("/tasks", dependencies=[Depends(validate_api_key)])
+def create_task(task: Task):
+    with get_db() as conn:
+        cur = conn.cursor()
+        cur.execute(
+            "INSERT INTO tasks (project_id, name) VALUES (?, ?)",
+            (task.project_id, task.name)
+        )
+        conn.commit()
+        return {"id": cur.lastrowid, **task.dict()}
 
-@app.patch("/tasks/{task_id}")
+@app.patch("/tasks/{task_id}", dependencies=[Depends(validate_api_key)])
 def toggle_task(task_id: int):
-    c = conn.cursor()
-    c.execute("SELECT status FROM tasks WHERE id = ?", (task_id,))
-    current_status = c.fetchone()[0]  # Get current status (0 or 1)
-    new_status = 1 if current_status == 0 else 0  # Flip it
-    c.execute("UPDATE tasks SET status = ? WHERE id = ?", (new_status, task_id))
-    conn.commit()
-    return {"id": task_id, "status": new_status}
+    with get_db() as conn:
+        cur = conn.cursor()
+        cur.execute("UPDATE tasks SET status = NOT status WHERE id = ?", (task_id,))
+        conn.commit()
+        cur.execute("SELECT status FROM tasks WHERE id = ?", (task_id,))
+        return {"status": cur.fetchone()["status"]}
