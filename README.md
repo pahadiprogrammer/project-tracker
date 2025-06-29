@@ -32,6 +32,9 @@ A simple web app to track personal projects and their tasks, built with React (f
 
     ```bash
     cd ../frontend
+    pip install nodeenv
+    nodeenv env
+    . env/bin/activate # Setup node virtual environment
     npm install
     npm install axios react-router-dom  # Additional deps
     ```
