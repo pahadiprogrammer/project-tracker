@@ -1,0 +1,10 @@
+Homepage:
+- "Project Tracker"
+- [Add Project] button
+- List: "LeetCode MVP" -> [View Tasks]
+
+Project Page:
+- "LeetCode MVP"
+- Add Task: [________] [Submit]
+- Tasks: "Set up repo [ ]" | "Code AI [ ]"
+- Progress: [===    ] 2/5 done
